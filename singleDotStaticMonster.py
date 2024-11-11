@@ -11,7 +11,104 @@ def prt(V):
 
 # Complete your code here for
 # value iteration and extract policy
+# initialize V as an empty dictionary
+V = {}
+# select a value for gamma
+gamma = 0.9
+# epsilon is used to for exploration
+epsilon = 0.1
 
+# write a for loop for a maximum number of episodes
+for episode in range(100):
+    # set currentState as the problem start state
+    currentState = p.getStartState()
+    # write an infinite loop while True
+    while True:
+        # Check if currentState is a Terminal state
+        if p.isTerminal(currentState):
+            V[currentState] = p.reward(currentState) # problem reward of that currentState
+            break # break the loop
+            
+            
+        # write an if to check if currentState is in V:
+        # if currentState not in V then add it to V and set its
+        # value to zero.
+        if currentState not in V: V[currentState] = 0
+
+        # Compute maximum reward for all neighbors:
+        # 1) get neighbors.
+        neighbors = p.transition(currentState)
+        
+        # 2) get the maximum V for all neighbors
+        # a) set maxV and bestState
+        maxV = -99999 # assume maximum V is lowest value
+        bestState = None # assume best state is None
+        # b) loop over all neighbors and find maximum V
+        
+        # and best state for the corresponding maximum V
+        # you may encounter a situation where a state
+        # is not in V dictionary. If this is the case
+        # assume its V is zero.
+        for s, a in neighbors:
+            if s in V: v = V[s]
+            else: v = 0
+            if v > maxV:
+                maxV = v
+                bestState = s 
+            # if the state is not V, assume it is (v=0)
+            # else it is v=V[s]
+            
+            
+            # Compare v with maxV, and store in maxV the maximum
+            # do not forget to save the state with the maximum V
+            # in bestState variable
+
+            
+        # 3) Write Bellman equation V[s] = reward(s) + gamma max(V of all neighbors)
+        V[currentState] = p.reward(currentState) + gamma * maxV
+
+
+        # Leave this part unchanged
+        r = random.random()
+        if r < epsilon: n = bestState
+        else:  n, a = random.choice(neighbors)
+        
+        # 4) set currentState to n
+        currentState = n  # Set currentState to the next state selected
+        
+        
+# Extract Policy
+policy = {}
+
+# 1) Loop over all all states in V
+for s in V:
+    # 2) if currentState is termianl state:
+    if p.isTerminal(s):
+        # set the policy for currentState to None
+        policy[s] = None
+        continue
+    neighbors = p.transition(s)
+    # get the neighbors
+    
+    # Leave the next three lines
+    bestAction = None
+    maxV = -9999
+    # Loop over all neighbors, remember neighbors 
+    # are in the form: (state, action)
+    for n, a in neighbors:
+        if n in V: v = V[n]
+        else: v = 0
+        if v > maxV:
+            maxV = v
+            bestAction = a
+        # if state not in V, then assume it is v=0
+        # else then assume it is v=V[s]
+        
+        # set maxV to the maximum of the current v and maxV
+        # also store the best action
+        
+    # save bestAction in policy[currentState] 11
+    policy[s] = bestAction
 
 
 # ------ END of your code ----------------
